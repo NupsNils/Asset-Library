@@ -1,0 +1,46 @@
+{
+  "name": "asset-library",
+  "version": "0.1.0",
+  "description": "Desktop asset browser for Blender/Unity workflows: projects, folder categories, thumbnails, native drag and drop",
+  "main": "./out/main/index.js",
+  "author": "Nils Frädrich",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NupsNils/Asset-Library.git"
+  },
+  "homepage": "https://github.com/NupsNils/Asset-Library#readme",
+  "bugs": {
+    "url": "https://github.com/NupsNils/Asset-Library/issues"
+  },
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "dist": "npm run icon && electron-vite build && electron-builder --win --config electron-builder.yml",
+    "smoke": "electron-vite build && node scripts/smoke.js",
+    "test:blend": "node scripts/test-blend-thumb.mts",
+    "icon": "node scripts/make-icon.js"
+  },
+  "dependencies": {
+    "chokidar": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^44.4.1",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.0.0",
+    "three": "^0.186.0",
+    "zustand": "^5.0.15"
+  }
+}
