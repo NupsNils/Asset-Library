@@ -30,10 +30,10 @@ function sameDir(a: string, b: string): boolean {
 
 export async function renameFile(path: string, newName: string): Promise<string> {
   const name = newName.trim()
-  if (!name || INVALID_NAME.test(name)) throw new Error('Ungültiger Dateiname')
+  if (!name || INVALID_NAME.test(name)) throw new Error('Invalid file name')
   const target = join(dirname(path), name)
   if (resolve(target) === resolve(path)) return path
-  if (await exists(target)) throw new Error(`"${name}" existiert bereits`)
+  if (await exists(target)) throw new Error(`"${name}" already exists`)
   await fsRename(path, target)
   return target
 }
@@ -80,7 +80,7 @@ export function trashFiles(paths: string[]): Promise<ImportResult> {
 export function importFiles(paths: string[], destDir: string, mode: ImportMode): Promise<ImportResult> {
   return forEachFile(paths, async (p) => {
     const s = await stat(p)
-    if (!s.isFile()) throw new Error('Ordner werden (noch) nicht importiert')
+    if (!s.isFile()) throw new Error('Folders are not imported (yet)')
     if (sameDir(dirname(p), destDir)) return
     const target = await uniquePath(destDir, basename(p))
     if (mode === 'move') await moveOne(p, target)

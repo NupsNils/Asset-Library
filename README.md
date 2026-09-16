@@ -33,9 +33,9 @@ The binaries are not code-signed, so Windows SmartScreen shows a warning the fir
 
 On first start in a development checkout, a project called "Demo" points at the bundled `samples/DemoProject` folder. In the packaged app, start by creating a project:
 
-1. Open the project dropdown (top-left) and choose "Neues Projekt…".
-2. Give it a name and add one or more library folders, for example `MyGame/Blender` and `MyGame/Photoshop`.
-3. Every subfolder that contains supported files is now listed as a category.
+1. Open the project dropdown (top-left) and choose "New project…".
+2. Give it a name and use "Add folder…" to add one or more library folders, for example `MyGame/Blender` and `MyGame/Photoshop`.
+3. Every subfolder that contains supported files is now listed as a category. "Edit project…" in the same dropdown lets you rename the project or change its folders later.
 
 ### Controls
 

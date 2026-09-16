@@ -131,10 +131,10 @@ export const useStore = create<State>((set, get) => ({
       const first = r.failed[0]
       const name = first.path.split(/[\\/]/).pop()
       get().showToast(
-        `${r.failed.length} Datei(en) nicht ${verb}: ${name} – ${first.error}`
+        `${r.failed.length} file(s) not ${verb}: ${name} – ${first.error}`
       )
     } else if (r.ok.length > 1) {
-      get().showToast(`${r.ok.length} Dateien ${verb}`)
+      get().showToast(`${r.ok.length} files ${verb}`)
     }
   },
 

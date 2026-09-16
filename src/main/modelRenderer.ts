@@ -40,7 +40,7 @@ function ensureWindow(): Promise<void> {
     win.on('closed', () => {
       win = null
       ready = null
-      failCurrent(new Error('Thumbnail-Renderer geschlossen'))
+      failCurrent(new Error('Thumbnail renderer closed'))
       // Wartende Jobs bekommen ein frisches Fenster (außer beim Beenden der App)
       if (!shuttingDown) pump()
     })
@@ -68,7 +68,7 @@ ipcMain.on('thumb:result', (_e, payload: { id: number; dataUrl?: string; error?:
     const base64 = payload.dataUrl.replace(/^data:image\/png;base64,/, '')
     job.resolve(Buffer.from(base64, 'base64'))
   } else {
-    job.reject(new Error(payload.error ?? 'Render fehlgeschlagen'))
+    job.reject(new Error(payload.error ?? 'Render failed'))
   }
   pump()
 })
@@ -87,9 +87,9 @@ function pump(): void {
   current = job
   ensureWindow()
     .then(() => {
-      if (!win) throw new Error('kein Renderer-Fenster')
+      if (!win) throw new Error('no renderer window')
       job.timer = setTimeout(() => {
-        failCurrent(new Error('Timeout beim Rendern'))
+        failCurrent(new Error('Render timed out'))
         // Worker hängt vermutlich → neu starten ('closed' ruft pump())
         win?.destroy()
       }, JOB_TIMEOUT_MS)
@@ -116,7 +116,7 @@ export function renderModelThumbnail(path: string, size: number): Promise<Buffer
 
 export function destroyModelRenderer(): void {
   shuttingDown = true
-  const err = new Error('App wird beendet')
+  const err = new Error('App is shutting down')
   for (const j of queue.splice(0)) j.reject(err)
   win?.destroy()
 }

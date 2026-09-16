@@ -102,7 +102,7 @@ function registerProtocols(): void {
     const pathname = decodeURIComponent(new URL(req.url).pathname).replace(/^\//, '')
     const filePath = resolve(pathname)
     if (!isInsideLibrary(filePath)) {
-      console.warn('[asset] verweigert (nicht im Library-Pfad):', filePath)
+      console.warn('[asset] refused (outside library folders):', filePath)
       return new Response('forbidden', { status: 403 })
     }
     // Das Worker-Fenster läuft unter file:// bzw. http://localhost → CORS-Header nötig
@@ -116,7 +116,7 @@ function registerProtocols(): void {
           })
       )
       .catch((err: Error) => {
-        console.warn('[asset] fetch fehlgeschlagen:', filePath, err.message)
+        console.warn('[asset] fetch failed:', filePath, err.message)
         return new Response(String(err), { status: 500, headers: { 'Access-Control-Allow-Origin': '*' } })
       })
   })

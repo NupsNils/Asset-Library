@@ -32,8 +32,8 @@ export function Header(): JSX.Element {
   return (
     <div className="header">
       <div className="project-menu" ref={menuRef}>
-        <button className="project-btn" onClick={() => setOpen((o) => !o)} title="Projekt wechseln">
-          <span className="project-name">{active?.name ?? 'Kein Projekt'}</span>
+        <button className="project-btn" onClick={() => setOpen((o) => !o)} title="Switch project">
+          <span className="project-name">{active?.name ?? 'No project'}</span>
           <span className="chevron">▽</span>
         </button>
         {open && (
@@ -45,7 +45,7 @@ export function Header(): JSX.Element {
                 onClick={() => void choose(p.id)}
               >
                 {p.name}
-                <span className="muted">{p.libraryPaths.length} Pfad(e)</span>
+                <span className="muted">{p.libraryPaths.length} folder(s)</span>
               </button>
             ))}
             {config?.projects.length ? <div className="dropdown-sep" /> : null}
@@ -57,7 +57,7 @@ export function Header(): JSX.Element {
                   openModal({ type: 'project', id: active.id })
                 }}
               >
-                Projekt bearbeiten…
+                Edit project…
               </button>
             )}
             <button
@@ -67,26 +67,26 @@ export function Header(): JSX.Element {
                 openModal({ type: 'project', id: null })
               }}
             >
-              Neues Projekt…
+              New project…
             </button>
           </div>
         )}
       </div>
-      <div className="header-spacer">{loading && <span className="muted">Scanne…</span>}</div>
+      <div className="header-spacer">{loading && <span className="muted">Scanning…</span>}</div>
       <button
         className={['icon-btn', 'big', config?.settings.alwaysOnTop ? 'active' : ''].join(' ')}
-        title={config?.settings.alwaysOnTop ? 'Immer im Vordergrund: an' : 'Immer im Vordergrund: aus'}
+        title={config?.settings.alwaysOnTop ? 'Always on top: on' : 'Always on top: off'}
         onClick={() => void window.api.setAlwaysOnTop(!config?.settings.alwaysOnTop).then(applyConfig)}
       >
         <PinIcon />
       </button>
-      <button className="icon-btn big" title="Neu laden (F5)" onClick={() => void refresh()}>
+      <button className="icon-btn big" title="Rescan (F5)" onClick={() => void refresh()}>
         <RefreshIcon />
       </button>
-      <button className="icon-btn big" title="Einstellungen" onClick={() => openModal({ type: 'settings' })}>
+      <button className="icon-btn big" title="Settings" onClick={() => openModal({ type: 'settings' })}>
         <GearIcon />
       </button>
-      <button className="icon-btn big" title="Hilfe" onClick={() => openModal({ type: 'help' })}>
+      <button className="icon-btn big" title="Help" onClick={() => openModal({ type: 'help' })}>
         <span className="help-icon">?</span>
       </button>
     </div>

@@ -39,13 +39,13 @@ export function CategorySection({ category, collapsed, selected, onTileClick, on
     const internal = e.dataTransfer.getData(INTERNAL_DRAG_TYPE)
     if (internal) {
       const paths = JSON.parse(internal) as string[]
-      reportResult(await window.api.moveFiles(paths, category.dirPath), 'verschoben')
+      reportResult(await window.api.moveFiles(paths, category.dirPath), 'moved')
     } else {
       const paths = window.api.getPathsForFiles(Array.from(e.dataTransfer.files))
       if (!paths.length) return
       // Shift beim Drop = verschieben statt kopieren (wie im Explorer)
       const mode = e.shiftKey ? 'move' : 'copy'
-      reportResult(await window.api.importFiles(paths, category.dirPath, mode), mode === 'move' ? 'verschoben' : 'importiert')
+      reportResult(await window.api.importFiles(paths, category.dirPath, mode), mode === 'move' ? 'moved' : 'imported')
     }
     await refresh()
   }
@@ -63,7 +63,7 @@ export function CategorySection({ category, collapsed, selected, onTileClick, on
         <span className="category-count">{category.files.length}</span>
         <button
           className="icon-btn"
-          title="Ordner im Explorer öffnen"
+          title="Open folder in Explorer"
           onClick={(e) => {
             e.stopPropagation()
             void window.api.openCategoryFolder(category.dirPath)

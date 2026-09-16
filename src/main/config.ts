@@ -91,7 +91,7 @@ export function activeProject(): Project | null {
 export const projects = {
   create: (name: string) =>
     updateConfig((c) => {
-      const p: Project = { id: randomUUID(), name: name.trim() || 'Neues Projekt', libraryPaths: [] }
+      const p: Project = { id: randomUUID(), name: name.trim() || 'New project', libraryPaths: [] }
       c.projects.push(p)
       c.activeProjectId = p.id
     }),

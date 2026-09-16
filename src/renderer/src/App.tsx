@@ -27,14 +27,14 @@ export default function App(): JSX.Element {
       const names = paths.map((p) => p.split(/[\\/]/).pop()).slice(0, 5)
       openModal({
         type: 'confirm',
-        title: 'In den Papierkorb',
+        title: 'Move to Recycle Bin',
         message:
           paths.length === 1
-            ? `"${names[0]}" in den Papierkorb verschieben?`
-            : `${paths.length} Dateien in den Papierkorb verschieben? (${names.join(', ')}${paths.length > 5 ? ', …' : ''})`,
+            ? `Move "${names[0]}" to the Recycle Bin?`
+            : `Move ${paths.length} files to the Recycle Bin? (${names.join(', ')}${paths.length > 5 ? ', …' : ''})`,
         onConfirm: () => {
           void window.api.trashFiles(paths).then(async (r) => {
-            useStore.getState().reportResult(r, 'gelöscht')
+            useStore.getState().reportResult(r, 'deleted')
             await useStore.getState().refresh()
           })
         }
@@ -141,21 +141,21 @@ export default function App(): JSX.Element {
       <main className="content">
         {!config ? null : !active ? (
           <Empty
-            title="Kein Projekt ausgewählt"
-            hint="Lege oben links ein Projekt an und füge Library-Ordner hinzu."
-            action={{ label: 'Neues Projekt…', onClick: () => openModal({ type: 'project', id: null }) }}
+            title="No project selected"
+            hint="Create a project in the top-left dropdown and add library folders."
+            action={{ label: 'New project…', onClick: () => openModal({ type: 'project', id: null }) }}
           />
         ) : !active.libraryPaths.length ? (
           <Empty
-            title={`"${active.name}" hat noch keine Library-Ordner`}
-            hint="Jeder Unterordner mit Assets wird als Kategorie angezeigt."
-            action={{ label: 'Ordner hinzufügen…', onClick: () => openModal({ type: 'project', id: active.id }) }}
+            title={`"${active.name}" has no library folders yet`}
+            hint="Every subfolder that contains assets is shown as a category."
+            action={{ label: 'Add folder…', onClick: () => openModal({ type: 'project', id: active.id }) }}
           />
         ) : !categories.length ? (
           <Empty
-            title="Keine Assets gefunden"
-            hint={`Gesucht wird nach: ${config.settings.extensions.join(', ')}`}
-            action={{ label: 'Dateitypen anpassen…', onClick: () => openModal({ type: 'settings' }) }}
+            title="No assets found"
+            hint={`Looking for: ${config.settings.extensions.join(', ')}`}
+            action={{ label: 'Change file types…', onClick: () => openModal({ type: 'settings' }) }}
           />
         ) : (
           categories.map((c) => (

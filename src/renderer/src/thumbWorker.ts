@@ -64,7 +64,7 @@ async function load(url: string): Promise<THREE.Object3D> {
       return gltf.scene
     }
     default:
-      throw new Error(`Format nicht unterstützt: ${ext}`)
+      throw new Error(`Unsupported format: ${ext}`)
   }
 }
 
@@ -81,7 +81,7 @@ function applyClay(root: THREE.Object3D): void {
 
 function frame(obj: THREE.Object3D): void {
   const box = new THREE.Box3().setFromObject(obj)
-  if (box.isEmpty()) throw new Error('Leeres Modell')
+  if (box.isEmpty()) throw new Error('Empty model')
   const center = box.getCenter(new THREE.Vector3())
   const size = box.getSize(new THREE.Vector3())
   const radius = Math.max(size.length() / 2, 1e-6)

@@ -23,7 +23,7 @@ export function registerIpc(hooks: { onLibrariesChanged: () => void }): void {
   ipcMain.handle('project:addLibraryPath', async (e, id: string) => {
     const win = BrowserWindow.fromWebContents(e.sender)
     const opts: Electron.OpenDialogOptions = {
-      title: 'Library-Ordner auswählen',
+      title: 'Select library folder',
       properties: ['openDirectory']
     }
     const res = win ? await dialog.showOpenDialog(win, opts) : await dialog.showOpenDialog(opts)
@@ -88,14 +88,14 @@ function showFileMenu(win: BrowserWindow, paths: string[]): void {
     win.webContents.send('menu:file-action', ev)
   }
   const menu = Menu.buildFromTemplate([
-    { label: many ? `${paths.length} Dateien öffnen` : 'Öffnen', click: () => send('open') },
-    { label: 'Im Explorer anzeigen', click: () => send('reveal'), enabled: !many },
+    { label: many ? `Open ${paths.length} files` : 'Open', click: () => send('open') },
+    { label: 'Show in Explorer', click: () => send('reveal'), enabled: !many },
     { type: 'separator' },
-    { label: 'Umbenennen', accelerator: 'F2', click: () => send('rename'), enabled: !many },
-    { label: 'Verschieben nach…', click: () => send('move') },
+    { label: 'Rename', accelerator: 'F2', click: () => send('rename'), enabled: !many },
+    { label: 'Move to…', click: () => send('move') },
     { type: 'separator' },
     {
-      label: many ? `${paths.length} Dateien in den Papierkorb` : 'In den Papierkorb',
+      label: many ? `Move ${paths.length} files to Recycle Bin` : 'Move to Recycle Bin',
       accelerator: 'Delete',
       click: () => send('trash')
     }

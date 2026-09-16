@@ -18,7 +18,7 @@ function Modal({ title, children, onClose, width }: { title: string; children: R
       <div className="modal" style={width ? { width } : undefined} role="dialog" aria-label={title}>
         <div className="modal-title">
           {title}
-          <button className="icon-btn" onClick={onClose} title="Schließen">
+          <button className="icon-btn" onClick={onClose} title="Close">
             ✕
           </button>
         </div>
@@ -68,24 +68,24 @@ function SettingsModal({ onClose }: { onClose: () => void }): JSX.Element {
   const clearCache = async (): Promise<void> => {
     await window.api.clearThumbCache()
     useStore.setState({ thumbs: {} })
-    showToast('Thumbnail-Cache geleert')
+    showToast('Thumbnail cache cleared')
   }
   return (
-    <Modal title="Einstellungen" onClose={onClose}>
+    <Modal title="Settings" onClose={onClose}>
       <label className="field">
-        <span>Dateitypen (kommagetrennt)</span>
+        <span>File types (comma-separated)</span>
         <input value={exts} onChange={(e) => setExts(e.target.value)} spellCheck={false} />
       </label>
       <label className="field">
-        <span>Thumbnail-Größe (px)</span>
+        <span>Thumbnail size (px)</span>
         <input type="number" min={64} max={1024} step={32} value={size} onChange={(e) => setSize(e.target.value)} />
       </label>
       <div className="row">
-        <button onClick={() => void clearCache()}>Thumbnail-Cache leeren</button>
+        <button onClick={() => void clearCache()}>Clear thumbnail cache</button>
         <span className="spacer" />
-        <button onClick={onClose}>Abbrechen</button>
+        <button onClick={onClose}>Cancel</button>
         <button className="primary" onClick={() => void save()}>
-          Speichern
+          Save
         </button>
       </div>
     </Modal>
@@ -134,8 +134,8 @@ function ProjectModal({ id, onClose }: { id: string | null; onClose: () => void 
     if (!projectId) return
     openModal({
       type: 'confirm',
-      title: 'Projekt löschen',
-      message: `Projekt "${current?.name}" aus der Library entfernen? Es werden keine Dateien gelöscht.`,
+      title: 'Delete project',
+      message: `Remove project "${current?.name}" from the library? No files will be deleted.`,
       onConfirm: () => {
         void window.api.deleteProject(projectId).then(async (c) => {
           applyConfig(c)
@@ -146,40 +146,40 @@ function ProjectModal({ id, onClose }: { id: string | null; onClose: () => void 
   }
 
   return (
-    <Modal title={projectId ? 'Projekt bearbeiten' : 'Neues Projekt'} onClose={onClose} width={520}>
+    <Modal title={projectId ? 'Edit project' : 'New project'} onClose={onClose} width={520}>
       <label className="field">
         <span>Name</span>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="z.B. Miners Fun" autoFocus />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Miners Fun" autoFocus />
       </label>
       <div className="field">
-        <span>Library-Ordner (Unterordner werden zu Kategorien)</span>
+        <span>Library folders (subfolders become categories)</span>
         <ul className="path-list">
           {current?.libraryPaths.map((p) => (
             <li key={p}>
               <span className="path" title={p}>
                 {p}
               </span>
-              <button className="icon-btn" title="Entfernen" onClick={() => void removePath(p)}>
+              <button className="icon-btn" title="Remove" onClick={() => void removePath(p)}>
                 ✕
               </button>
             </li>
           ))}
-          {!current?.libraryPaths.length && <li className="muted">Noch keine Ordner</li>}
+          {!current?.libraryPaths.length && <li className="muted">No folders yet</li>}
         </ul>
         <button onClick={() => void addPath()} disabled={!projectId && !name.trim()}>
-          Ordner hinzufügen…
+          Add folder…
         </button>
       </div>
       <div className="row">
         {projectId && (
           <button className="danger" onClick={remove}>
-            Projekt löschen
+            Delete project
           </button>
         )}
         <span className="spacer" />
-        <button onClick={onClose}>Abbrechen</button>
+        <button onClick={onClose}>Cancel</button>
         <button className="primary" onClick={() => void save()} disabled={!name.trim()}>
-          Fertig
+          Done
         </button>
       </div>
     </Modal>
@@ -195,11 +195,11 @@ function MoveModal({ paths, onClose }: { paths: string[]; onClose: () => void })
   const reportResult = useStore((s) => s.reportResult)
   const move = async (dir: string): Promise<void> => {
     onClose()
-    reportResult(await window.api.moveFiles(paths, dir), 'verschoben')
+    reportResult(await window.api.moveFiles(paths, dir), 'moved')
     await refresh()
   }
   return (
-    <Modal title={`${paths.length} Datei(en) verschieben nach…`} onClose={onClose}>
+    <Modal title={`Move ${paths.length} file(s) to…`} onClose={onClose}>
       <ul className="pick-list">
         {categories.map((c) => (
           <li key={c.id}>
@@ -207,7 +207,7 @@ function MoveModal({ paths, onClose }: { paths: string[]; onClose: () => void })
           </li>
         ))}
       </ul>
-      <p className="muted">Tipp: Alt + Ziehen eines Tiles auf eine Kategorie verschiebt ebenfalls.</p>
+      <p className="muted">Tip: Alt + dragging a tile onto a category header also moves it.</p>
     </Modal>
   )
 }
@@ -222,7 +222,7 @@ function ConfirmModal({ modal, onClose }: { modal: Extract<ModalState, { type: '
       <div className="row">
         <span className="spacer" />
         <button onClick={onClose} autoFocus>
-          Abbrechen
+          Cancel
         </button>
         <button
           className="danger"
@@ -243,20 +243,20 @@ function ConfirmModal({ modal, onClose }: { modal: Extract<ModalState, { type: '
 // ---------------------------------------------------------------------------
 function HelpModal({ onClose }: { onClose: () => void }): JSX.Element {
   return (
-    <Modal title="Hilfe" onClose={onClose} width={520}>
+    <Modal title="Help" onClose={onClose} width={520}>
       <table className="help">
         <tbody>
-          <tr><td>Ziehen</td><td>Datei nach Explorer / Unity kopieren (natives Drag &amp; Drop)</td></tr>
-          <tr><td>Alt + Ziehen</td><td>In eine andere Kategorie verschieben</td></tr>
-          <tr><td>Drop aus Explorer</td><td>In Kategorie kopieren (Shift = verschieben)</td></tr>
-          <tr><td>Doppelklick</td><td>In Standard-App öffnen</td></tr>
-          <tr><td>Rechtsklick</td><td>Kontextmenü (Öffnen, Explorer, Umbenennen, Verschieben, Papierkorb)</td></tr>
-          <tr><td>Strg / Shift + Klick</td><td>Mehrfachauswahl</td></tr>
-          <tr><td>F2</td><td>Umbenennen</td></tr>
-          <tr><td>Entf</td><td>In den Papierkorb</td></tr>
-          <tr><td>F5</td><td>Neu laden</td></tr>
-          <tr><td>Esc</td><td>Auswahl aufheben</td></tr>
-          <tr><td>📌 (Kopfzeile)</td><td>Fenster immer im Vordergrund halten (z.B. neben Unity)</td></tr>
+          <tr><td>Drag</td><td>Copy the file to Explorer / Unity (native drag &amp; drop)</td></tr>
+          <tr><td>Alt + drag</td><td>Move to another category</td></tr>
+          <tr><td>Drop from Explorer</td><td>Copy into the category (Shift = move)</td></tr>
+          <tr><td>Double-click</td><td>Open in the default application</td></tr>
+          <tr><td>Right-click</td><td>Context menu (Open, Explorer, Rename, Move, Recycle Bin)</td></tr>
+          <tr><td>Ctrl / Shift + click</td><td>Multi-select</td></tr>
+          <tr><td>F2</td><td>Rename</td></tr>
+          <tr><td>Delete</td><td>Move to the Recycle Bin</td></tr>
+          <tr><td>F5</td><td>Rescan</td></tr>
+          <tr><td>Esc</td><td>Clear selection</td></tr>
+          <tr><td>Pin (header)</td><td>Keep the window above Unity / Blender</td></tr>
         </tbody>
       </table>
     </Modal>

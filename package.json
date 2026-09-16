@@ -1,6 +1,6 @@
 {
   "name": "asset-library",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Desktop asset browser for Blender/Unity workflows: projects, folder categories, thumbnails, native drag and drop",
   "main": "./out/main/index.js",
   "author": "Nils Frädrich",

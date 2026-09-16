@@ -22,7 +22,7 @@ export async function runSmokeTest(libraryDir: string): Promise<void> {
   })
   const started = Date.now()
   const cats = await scanLibraries([libraryDir], DEFAULT_EXTENSIONS)
-  console.log(`[smoke] ${cats.length} Kategorien in ${Date.now() - started} ms`)
+  console.log(`[smoke] ${cats.length} categories in ${Date.now() - started} ms`)
   let ok = 0
   let fail = 0
   for (const c of cats) {
@@ -42,7 +42,7 @@ export async function runSmokeTest(libraryDir: string): Promise<void> {
     c.projects = c.projects.filter((p) => p.id !== 'smoke')
     c.activeProjectId = c.projects[0]?.id ?? null
   })
-  console.log(`[smoke] fertig: ${ok} Thumbnails OK, ${fail} fehlgeschlagen`)
+  console.log(`[smoke] done: ${ok} thumbnails OK, ${fail} failed`)
   fail += await smokeFileOps(cats)
   destroyModelRenderer()
   app.exit(fail ? 1 : 0)
@@ -67,7 +67,7 @@ async function smokeFileOps(cats: Category[]): Promise<number> {
     check('import (copy)', imp.ok.length === 1 && imp.failed.length === 0)
     const imp2 = await importFiles([src.path], a, 'copy')
     const names = await readdir(a)
-    check('import Kollision → " (2)"-Suffix', imp2.ok.length === 1 && names.length === 2 && names.some((n) => n.includes(' (2)')))
+    check('import collision → " (2)" suffix', imp2.ok.length === 1 && names.length === 2 && names.some((n) => n.includes(' (2)')))
     const renamed = await renameFile(join(a, src.name), 'renamed' + src.ext)
     check('rename', basename(renamed) === 'renamed' + src.ext)
     let threw = false
@@ -76,17 +76,17 @@ async function smokeFileOps(cats: Category[]): Promise<number> {
     } catch {
       threw = true
     }
-    check('rename ungültiger Name wirft', threw)
+    check('rename with invalid name throws', threw)
     const mv = await moveFiles([renamed], b)
-    check('move in andere Kategorie', mv.ok.length === 1 && (await readdir(b)).length === 1)
+    check('move to another category', mv.ok.length === 1 && (await readdir(b)).length === 1)
     const tr = await trashFiles([join(b, 'renamed' + src.ext)])
-    check('trash (Papierkorb)', tr.ok.length === 1 && (await readdir(b)).length === 0)
+    check('trash (Recycle Bin)', tr.ok.length === 1 && (await readdir(b)).length === 0)
   } catch (err) {
     console.log('[smoke]   ERR fileops:', err instanceof Error ? err.message : err)
     failures++
   } finally {
     await rm(tmp, { recursive: true, force: true })
   }
-  console.log(`[smoke] fileops: ${failures} Fehler`)
+  console.log(`[smoke] fileops: ${failures} failures`)
   return failures
 }
